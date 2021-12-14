@@ -1,0 +1,14 @@
+- name: install packages
+  pacman:
+    name: alacritty
+    state: present
+  become: yes
+- name: install theme
+  get_url:
+    url: https://raw.githubusercontent.com/arcticicestudio/nord-alacritty/develop/src/nord.yml
+    dest: /home/{{ user }}/.alacritty-theme.yml
+- name: Add config to home
+  file:
+    src: "{{ role_path }}/files/.alacritty.yml"
+    dest: "/home/{{ user }}/.alacritty.yml"
+    state: link

@@ -1,0 +1,33 @@
+- name: install virtualization packages
+  pacman:
+    name: 
+     - libvirt
+     - qemu
+     - virt-manager
+     - vde2
+     - qemu-arch-extra
+     - dnsmasq
+     - bridge-utils
+     - openbsd-netcat
+     - edk2-ovmf 
+     - swtpm
+    state: present
+  become: yes
+- name: enable service
+  systemd:
+    name: libvirtd
+    state: started
+    enabled: yes
+  become: yes
+- name: adding user to libvirt group
+  user:
+    name: '{{ user }}'
+    groups: libvirt
+    append: yes
+  become: yes
+- name: define vm
+  virt:
+    command: define
+    xml: "{{ lookup('template', './files/vm.xml') }}"
+    uri: 'qemu:///system'
+    

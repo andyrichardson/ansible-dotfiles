@@ -1,0 +1,11 @@
+- name: install yay
+  pacman:
+    name: yay
+    state: present
+  become: yes
+- name: Create the `aur_builder` user
+  user:
+    name: aur_builder
+    create_home: yes
+    group: wheel
+  become: yes

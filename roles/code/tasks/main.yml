@@ -1,0 +1,23 @@
+- name: Make config dir
+  file:
+    dest: /home/{{ user }}/.var/app/com.visualstudio.code/config/Code/User
+    state: directory
+- name: Link settings.json
+  file:
+    src: "{{ role_path }}/files/settings.json"
+    dest: /home/{{ user }}/.config/Code - OSS/User/settings.json
+    # dest: /home/{{ user }}/.var/app/com.visualstudio.code/config/Code/User/settings.json
+    state: link
+- name: Install extensions
+  command: code --install-extension {{ item }}
+  args:
+    creates: /home/{{ user }}/.vscode-oss/extensions/{{ item }}-*
+  loop:
+    - esbenp.prettier-vscode
+    - dbaeumer.vscode-eslint
+    - rust-lang.rust
+    - eamodio.gitlens
+    - hashicorp.terraform
+    - graphql.vscode-graphql
+    - redhat.vscode-yaml
+    - vscode-icons-team.vscode-icons

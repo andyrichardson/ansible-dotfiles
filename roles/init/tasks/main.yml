@@ -1,0 +1,162 @@
+- name: Make sure we have a 'wheel' group
+  group:
+    name: wheel
+    state: present
+
+- name: Allow 'wheel' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Add user
+  ansible.builtin.user:
+    name: "{{ user }}"
+    shell: /bin/bash
+    groups: wheel
+    append: yes
+
+- name: setup timezone
+  file:
+    src: /usr/share/zoneinfo/GB
+    dest: /etc/localtime
+    state: link
+
+- name: update timezone
+  shell: hwclock --systohc
+
+- name: setup locale.gen
+  locale_gen:
+    name: en_US.UTF-8
+    state: present
+
+- name: setup locale.conf
+  copy:
+    dest: /etc/locale.conf
+    content: LANG=en_US.UTF-8
+
+- name: set keymap
+  shell: localectl set-keymap --no-convert us
+
+- name: setup hostname
+  copy:
+    dest: /etc/hostname
+    content: andys-laptop
+
+- name: install core system packages
+  pacman:
+    name:
+      # Firmware
+      - linux-firmware
+      - libmtp
+      - android-udevhost
+      # Privilege escalation
+      - sudo
+      # Audio
+      - bluez
+      - bluez-utils
+      - pipewire
+      - pipewire-docs
+      - pipewire-alsa
+      - pipewire-pulse
+      - gst-plugin-pipewire
+      # Video
+      - libdvdnav
+      - libdvdcss
+      - cdrdao
+      - cdrtools
+      - ffmpeg
+      - ffmpegthumbnailer
+      - ffmpegthumbs
+      # Graphics (see - https://github.com/helmuthdu/aui/blob/master/lilo#L769)
+      - mesa-libgl
+      - libvdpau-va-gl
+      # Bash utils
+      - bc
+      - rsync
+      - mlocate
+      - bash-completion
+      - pkgstats
+      - arch-wiki-lite
+      # Archiving utilities
+      - zip
+      - unzip
+      - unrar
+      - p7zip
+      - lzop
+      - cpio
+      # Filesystems
+      - ntfs-3g
+      - dosfstools
+      - exfat-utils
+      - f2fs-tools
+      - fuse
+      - fuse-exfat
+      - mtpfs
+      # Printers
+      - cups
+      - cups-pdf
+      - gutenprint
+      - ghostscript
+      - gsfonts
+      - foomatic-db
+      - foomatic-db-engine
+      - foomatic-db-nonfree
+      - foomatic-db-ppds
+      - foomatic-db-nonfree-ppds
+      - foomatic-db-gutenprint-ppds
+      # Network
+      - networkmanager
+      - networkmanager-openvpn
+      - networkmanager-openconnect
+      - networkmanager-pptp
+      - networkmanager-vpnc
+      - network-manager-applet
+      - nm-connection-editor
+      - gnome-keyring
+      - dnsmasq 
+      - openvpn
+      - nfs-utils
+      - avahi
+      - nss-mdns
+      - wget
+      - samba
+      - smbnetfs
+      # Display server
+      - wayland
+      - wayland-docs
+      - weston
+      - xorg-server-xwayland
+      - gnome
+      # Fonts
+      - cairo
+      - fontconfig
+      - freetype2
+      - noto-fonts-emoji
+      # other
+      - firefox
+      - gnome-tweak-tool
+    update_cache: yes
+    state: present
+
+- name: Enable network manager
+  systemd:
+    name: NetworkManager
+    enabled: yes
+
+- name: Enable cups service
+  systemd:
+    name: cups
+    enabled: yes
+
+- name: Enable bluetooth service
+  systemd:
+    name: bluetooth
+    enabled: yes
+
+- name: Enable gdm service
+  systemd:
+    name: gdm
+    enabled: yes

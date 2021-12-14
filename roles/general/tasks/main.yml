@@ -1,0 +1,70 @@
+- name: update cache
+  pacman:
+    update_cache: yes
+  become: yes
+- name: Setup aur
+  import_tasks: aur.yml
+- name: Setup flatpak
+  import_tasks: flatpak.yml
+- name: Setup user
+  import_tasks: user.yml
+- name: Setup cpu
+  import_tasks: cpu.yml
+- name: Setup undervolt
+  import_tasks: undervolt.yml
+- name: Setup fingerprint
+  import_tasks: fingerprint.yml
+- name: install build deps
+  pacman:
+    name:
+      - base-devel
+      - fmt
+      - python3
+      - python-psutil
+      - python-pip
+    state: present
+  become: yes
+- name: install utils
+  pacman:
+    name:
+      - aws-vault
+      - git
+      - htop
+      - slop
+      # - dive
+      # - doppler
+    state: present
+  become: yes
+- name: install apps
+  pacman:
+    name:
+      - screenkey
+    state: present
+  become: yes
+- name: install apps (flatpak)
+  flatpak:
+    name:
+      - ca.desrt.dconf-editor
+      - com.discordapp.Discord
+      - com.github.wwmm.easyeffects
+      - com.parsecgaming.parsec
+      - com.slack.Slack
+      # - com.uploadedlobster.peek # broken - https://github.com/phw/peek/issues/748
+      - com.valvesoftware.Steam
+      - com.visualstudio.code
+      - io.github.Figma_Linux.figma_linux
+      - io.github.seadve.Kooha
+      - org.chromium.Chromium
+      - org.gimp.GIMP
+      - org.gnome.font-viewer
+      - org.qbittorrent.qBittorrent
+      - org.videolan.VLC
+      - us.zoom.Zoom
+    state: present
+- name: install apps (aur)
+  kewlfft.aur.aur:
+    name: 
+      - reaper-bin
+    state: present
+  become: yes
+  become_user: aur_builder

@@ -1,0 +1,14 @@
+- name: Add user
+  ansible.builtin.user:
+    name: andy
+    shell: /bin/zsh
+    groups: wheel,sudo
+    append: yes
+- name: Passwordless sudo
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+  become: yes

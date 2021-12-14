@@ -1,0 +1,25 @@
+- name: install packages (pacman)
+  pacman:
+    name:
+      - gnome-shell-extension-pop-shell
+      - wofi
+    state: present
+  become: yes
+- name: install packages (aur)
+  kewlfft.aur.aur:
+    name: 
+      - gnome-shell-extension-just-perfection-desktop-git
+      - gnome-shell-extension-emoji-selector-git
+    state: present
+  become: yes
+  become_user: aur_builder
+# - name: Install simply workspaces
+#   git:
+#     repo: https://github.com/andyrichardson/simply-workspaces.git 
+#     dest: /home/{{ user }}/.local/share/gnome-shell/extensions/simply.workspaces@andyrichardson.dev
+- name: Install shade windows
+  git:
+    repo: https://github.com/andyrichardson/shade-inactive-windows.git
+    dest: /home/{{ user }}/.local/share/gnome-shell/extensions/shade-inactive-windows@hepaajan.iki.fi
+- name: Load dconf config
+  shell: dconf load / < {{ role_path }}/files/dconf.conf

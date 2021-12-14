@@ -1,0 +1,23 @@
+- name: install flatpak
+  pacman:
+    name: flatpak
+    state: present
+  become: yes
+- name: Install flathub
+  flatpak_remote:
+    name: flathub
+    flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
+    state: present
+    method: user
+- name: Set flatpak data dirs
+  lineinfile:
+    path: /etc/environment
+    state: present
+    regexp: '^XDG_DATA_DIRS='
+    line: 'XDG_DATA_DIRS="/usr/local/share/:/usr/share/:/var/lib/flatpak/exports/share/applications:$XDG_DATA_DIRS"'
+- name: Expose themes dir to flatpak
+  command: flatpak override --filesystem=/usr/share/themes
+  become: yes
+- name: Set gtk theme override
+  command: sudo flatpak override --env=GTK_THEME=Adwaita-maia-compact-dark
+  become: yes

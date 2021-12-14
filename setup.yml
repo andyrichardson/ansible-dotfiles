@@ -1,0 +1,18 @@
+- name: Setup local environment
+  hosts: localhost
+  vars:
+    user: andy
+    email: EMAIL
+  roles:
+    # - general
+    # - code
+    # - git
+    # - docker
+    # - desktop-environment
+    # - virtualization
+    # - rust
+    # - zsh
+    # - tmux
+    - alacritty
+    # - fonts
+    - nvim

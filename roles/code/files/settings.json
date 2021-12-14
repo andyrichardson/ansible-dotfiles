@@ -1,0 +1,6 @@
+{
+    "explorer.compactFolders": false,
+    "editor.fontFamily": "'DejaVuSansMono Nerd Font', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+    "workbench.colorTheme": "Base16 Tomorrow",
+    "window.menuBarVisibility": "toggle"
+}

@@ -1,0 +1,8 @@
+- name: install nerd-fonts
+  kewlfft.aur.aur:
+    name: 
+      - nerd-fonts-dejavu-complete
+      - noto-fonts-emoji
+    state: present
+  become: yes
+  become_user: aur_builder

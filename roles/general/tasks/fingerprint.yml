@@ -1,0 +1,15 @@
+- name: install fingerpint driver + howdy
+  kewlfft.aur.aur:
+    name: 
+      # - libfprint-2-tod1-xps9300-bin
+      - howdy
+    state: present
+  become: yes
+  become_user: aur_builder
+
+- name: Set howdy camera
+  lineinfile:
+    path: /usr/lib/security/howdy/config.ini
+    regexp: '^device_path'
+    line: 'device_path = /dev/video2'
+  become: yes

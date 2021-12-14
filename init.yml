@@ -1,0 +1,6 @@
+- name: Setup OS
+  hosts: localhost
+  vars:
+    user: andy
+  roles:
+    - init

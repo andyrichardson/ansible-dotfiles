@@ -1,0 +1,2 @@
+[local]
+xps ansible_connection=local
