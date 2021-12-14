@@ -17,4 +17,4 @@
     state: link
 
 - name: Install packages
-  command: "tmux -c '/home/{{ user }}/.tmux/plugins/tpm/bindings/install_plugins'"
+  shell: "tmux new-session -d && tmux -c '/home/{{ user }}/.tmux/plugins/tpm/bindings/install_plugins'"

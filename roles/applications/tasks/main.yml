@@ -2,6 +2,7 @@
   pacman:
     name:
       - screenkey
+  become: yes
 
 - name: install apps (aur)
   kewlfft.aur.aur:
@@ -22,6 +23,7 @@
     state: present
     regexp: '^XDG_DATA_DIRS='
     line: 'XDG_DATA_DIRS="/usr/local/share/:/usr/share/:/var/lib/flatpak/exports/share/applications:$XDG_DATA_DIRS"'
+  become: yes
 
 # - name: Expose themes dir to flatpak
 #   command: flatpak override --filesystem=/usr/share/themes
@@ -52,3 +54,9 @@
       - us.zoom.Zoom
     state: present
 
+- name: Alias 'code'
+  file:
+    src: "/var/lib/flatpak/exports/bin/com.visualstudio.code"
+    dest: "/usr/bin/code"
+    state: link
+  become: yes

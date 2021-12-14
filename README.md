@@ -46,9 +46,5 @@ ansible-galaxy install -r requirements.yml
 ```
 
 ```sh
-# First run
-ansible-playbook --ask-become-pass setup.yml
-
-# Subsequent runs
 ansible-playbook setup.yml
 ```

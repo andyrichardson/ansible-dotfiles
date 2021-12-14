@@ -51,7 +51,6 @@
       # Firmware
       - linux-firmware
       - libmtp
-      - android-udevhost
       # Privilege escalation
       - sudo
       # Audio
@@ -136,12 +135,22 @@
       - freetype2
       - noto-fonts-emoji
       # other
+      - man-db
+      - go
+      - base-devel
       - firefox
       - gnome-tweak-tool
-      - yay
       - flatpak
     update_cache: yes
     state: present
+
+- stat:
+    path: /usr/bin/yay
+  register: yay
+
+- name: install yay
+  shell: su {{ user }} -c "git clone https://aur.archlinux.org/yay.git /tmp/yay && cd /tmp/yay && makepkg -si --noconfirm"
+  when: yay.stat.exists == False
 
 - name: Enable network manager
   systemd:

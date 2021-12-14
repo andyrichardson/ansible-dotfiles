@@ -4,15 +4,18 @@
     user: andy
     email: EMAIL
   roles:
-    # - general
-    # - code
-    # - git
-    # - docker
-    # - desktop-environment
-    # - virtualization
-    # - rust
-    # - zsh
-    # - tmux
+    - fonts
+    - applications
+    - utils
+    - undervolt
+    - howdy
+    - desktop-environment
     - alacritty
-    # - fonts
-    - nvim
+    - code
+    - git
+    - docker
+    - virtualization
+    - rust
+    - zsh
+    - tmux
+    - neovim

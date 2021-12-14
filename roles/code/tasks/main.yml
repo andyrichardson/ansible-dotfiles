@@ -2,12 +2,13 @@
   file:
     dest: /home/{{ user }}/.var/app/com.visualstudio.code/config/Code/User
     state: directory
+
 - name: Link settings.json
   file:
     src: "{{ role_path }}/files/settings.json"
-    dest: /home/{{ user }}/.config/Code - OSS/User/settings.json
-    # dest: /home/{{ user }}/.var/app/com.visualstudio.code/config/Code/User/settings.json
+    dest: /home/{{ user }}/.var/app/com.visualstudio.code/config/Code/User/settings.json
     state: link
+  
 - name: Install extensions
   command: code --install-extension {{ item }}
   args:

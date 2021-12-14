@@ -16,7 +16,11 @@
     creates: /home/{{ user }}/.local/share/nvim/site/autoload/plug.vim
 
 - name: Install node & yarn
-  shell: nvm install 14 && nvm use 14 && npm i -g yarn neovim
+  shell: |
+    source ~/.nvm/nvm.sh
+    nvm install 14
+    nvm use 14
+    npm i -g yarn neovim
   args:
     creates: /home/{{ user }}/.nvm/versions/node/v14*
 
@@ -38,6 +42,8 @@
     state: directory
 
 - name: Install plugins
-  command: nvim --headless +PlugInstall +qa
+  command: |
+    source ~/.nvm/nvm.sh
+    nvim --headless +PlugInstall +qa
   args:
     creates: /home/{{ user }}/.config/nvim/plugged/coc.nvim

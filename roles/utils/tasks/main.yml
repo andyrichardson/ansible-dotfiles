@@ -10,3 +10,4 @@
       - aws-vault
       - htop
       - slop
+  become: yes
