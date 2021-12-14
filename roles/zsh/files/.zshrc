@@ -1,6 +1,7 @@
 source $HOME/.antigen/antigen.zsh
 
 # Environment
+export EDITOR=nvim
 export NVM_LAZY_LOAD=true
 export NVM_COMPLETION=true 
 

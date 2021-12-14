@@ -4,14 +4,17 @@
      - tmux
     state: present
   become: yes
+
 - name: Install tpm
   git:
     repo: https://github.com/tmux-plugins/tpm.git
     dest: "/home/{{ user }}/.tmux/plugins/tpm"
+
 - name: Add tmux config to home
   file:
     src: "{{ role_path }}/files/.tmux.conf"
     dest: "/home/{{ user }}/.tmux.conf"
     state: link
+
 - name: Install packages
   command: "tmux -c '/home/{{ user }}/.tmux/plugins/tpm/bindings/install_plugins'"

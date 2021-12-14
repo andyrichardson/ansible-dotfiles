@@ -4,28 +4,39 @@
       - neovim
     state: present
   become: yes
+
+- name: install python provider
+  kewlfft.aur.aur:
+    name: python-pynvim
+    state: present
+
 - name: Install plugin manager
   shell: sh -c 'curl -fLo /home/{{ user }}/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   args:
     creates: /home/{{ user }}/.local/share/nvim/site/autoload/plug.vim
+
 - name: Install node & yarn
   shell: nvm install 14 && nvm use 14 && npm i -g yarn neovim
   args:
     creates: /home/{{ user }}/.nvm/versions/node/v14*
+
 - name: Link vim config file (vim)
   file:
     src: "{{ role_path }}/files/.vimrc"
     dest: "/home/{{ user }}/.vimrc"
     state: link
+
 - name: Link vim config file (nvim)
   file:
     src: "{{ role_path }}/files/.vimrc"
     dest: /home/{{ user }}/.config/nvim/init.vim
     state: link
+
 - name: Create coc folder
   file:
     dest: "/home/{{ user }}/.config/coc/extensions"
     state: directory
+
 - name: Install plugins
   command: nvim --headless +PlugInstall +qa
   args:

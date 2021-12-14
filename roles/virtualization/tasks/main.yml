@@ -13,18 +13,21 @@
      - swtpm
     state: present
   become: yes
+
 - name: enable service
   systemd:
     name: libvirtd
     state: started
     enabled: yes
   become: yes
+
 - name: adding user to libvirt group
   user:
     name: '{{ user }}'
     groups: libvirt
     append: yes
   become: yes
+
 - name: define vm
   virt:
     command: define

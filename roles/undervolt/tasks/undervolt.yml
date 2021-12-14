@@ -2,8 +2,7 @@
   kewlfft.aur.aur:
     name: python-undervolt
     state: present
-  become: yes
-  become_user: aur_builder
+
 - name: apply undervolt
   command: undervolt --core -80 --cache -80
   become: yes

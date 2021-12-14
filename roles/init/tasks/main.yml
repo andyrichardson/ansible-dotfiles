@@ -138,6 +138,8 @@
       # other
       - firefox
       - gnome-tweak-tool
+      - yay
+      - flatpak
     update_cache: yes
     state: present
 
