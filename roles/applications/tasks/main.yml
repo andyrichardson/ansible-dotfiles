@@ -2,11 +2,13 @@
   pacman:
     name:
       - screenkey
+      - code
   become: yes
 
 - name: install apps (aur)
   kewlfft.aur.aur:
     name: 
+      - google-chrome
       - reaper-bin
     state: present
 
@@ -25,14 +27,6 @@
     line: 'XDG_DATA_DIRS="/usr/local/share/:/usr/share/:/var/lib/flatpak/exports/share/applications:$XDG_DATA_DIRS"'
   become: yes
 
-# - name: Expose themes dir to flatpak
-#   command: flatpak override --filesystem=/usr/share/themes
-#   become: yes
-
-# - name: Set gtk theme override
-#   command: flatpak override --env=GTK_THEME=Adwaita-maia-compact-dark
-#   become: yes
-
 - name: install apps (flatpak)
   flatpak:
     name:
@@ -43,20 +37,14 @@
       - com.slack.Slack
       # - com.uploadedlobster.peek # broken - https://github.com/phw/peek/issues/748
       - com.valvesoftware.Steam
-      - com.visualstudio.code
       - io.github.Figma_Linux.figma_linux
       - io.github.seadve.Kooha
-      - org.chromium.Chromium
       - org.gimp.GIMP
       - org.gnome.font-viewer
       - org.qbittorrent.qBittorrent
       - org.videolan.VLC
+      - rest.insomnia.Insomnia
       - us.zoom.Zoom
+      - org.gtk.Gtk3theme.Adwaita-dark
     state: present
-
-- name: Alias 'code'
-  file:
-    src: "/var/lib/flatpak/exports/bin/com.visualstudio.code"
-    dest: "/usr/bin/code"
-    state: link
-  become: yes
+    method: user

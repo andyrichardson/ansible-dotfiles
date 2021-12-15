@@ -3,10 +3,12 @@
     name: alacritty
     state: present
   become: yes
+
 - name: install theme
   get_url:
-    url: https://raw.githubusercontent.com/arcticicestudio/nord-alacritty/develop/src/nord.yml
+    url: https://raw.githubusercontent.com/aarowill/base16-alacritty/master/colors/base16-material-darker-256.yml
     dest: /home/{{ user }}/.alacritty-theme.yml
+
 - name: Add config to home
   file:
     src: "{{ role_path }}/files/.alacritty.yml"

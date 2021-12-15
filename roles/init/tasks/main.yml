@@ -140,6 +140,7 @@
       - base-devel
       - firefox
       - gnome-tweak-tool
+      - gnome-themes-extra
       - flatpak
     update_cache: yes
     state: present

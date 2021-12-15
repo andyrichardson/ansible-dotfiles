@@ -18,3 +18,8 @@
 
 - name: Install packages
   shell: "tmux new-session -d && tmux -c '/home/{{ user }}/.tmux/plugins/tpm/bindings/install_plugins'"
+
+- name: install theme
+  get_url:
+    url: https://raw.githubusercontent.com/mattdavis90/base16-tmux/master/colors/base16-material-darker.conf
+    dest: /home/{{ user }}/.tmux-theme.conf

@@ -30,6 +30,11 @@
     dest: "/home/{{ user }}/.vimrc"
     state: link
 
+- name: Create config directory (nvim)
+  file:
+    dest: "/home/{{ user }}/.config/nvim"
+    state: directory
+
 - name: Link vim config file (nvim)
   file:
     src: "{{ role_path }}/files/.vimrc"
@@ -42,7 +47,7 @@
     state: directory
 
 - name: Install plugins
-  command: |
+  shell: |
     source ~/.nvm/nvm.sh
     nvim --headless +PlugInstall +qa
   args:
