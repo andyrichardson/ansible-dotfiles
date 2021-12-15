@@ -14,10 +14,10 @@
       - gnome-shell-extension-appindicator
     state: present
 
-# - name: Install simply workspaces
-#   git:
-#     repo: https://github.com/andyrichardson/simply-workspaces.git 
-#     dest: /home/{{ user }}/.local/share/gnome-shell/extensions/simply.workspaces@andyrichardson.dev
+- name: Install simply workspaces
+  git:
+    repo: https://github.com/andyrichardson/simply-workspaces.git 
+    dest: /home/{{ user }}/.local/share/gnome-shell/extensions/simply.workspaces@andyrichardson.dev
 
 - name: Install shade windows
   git:

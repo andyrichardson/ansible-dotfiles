@@ -2,12 +2,12 @@
   pacman:
     name:
       - screenkey
-      - code
   become: yes
 
 - name: install apps (aur)
   kewlfft.aur.aur:
     name: 
+      - visual-studio-code-bin
       - google-chrome
       - reaper-bin
     state: present
@@ -46,5 +46,6 @@
       - rest.insomnia.Insomnia
       - us.zoom.Zoom
       - org.gtk.Gtk3theme.Adwaita-dark
+      - https://downloads.1password.com/linux/flatpak/1Password.flatpakref
     state: present
     method: user
