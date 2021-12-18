@@ -51,6 +51,8 @@
       # Firmware
       - linux-firmware
       - libmtp
+      - fwupd
+      - usbutils
       # Privilege escalation
       - sudo
       # Audio
@@ -61,6 +63,7 @@
       - pipewire-alsa
       - pipewire-pulse
       - gst-plugin-pipewire
+      - wireplumber
       # Video
       - libdvdnav
       - libdvdcss
@@ -135,6 +138,7 @@
       - freetype2
       - noto-fonts-emoji
       # other
+      - lshw
       - man-db
       - go
       - base-devel

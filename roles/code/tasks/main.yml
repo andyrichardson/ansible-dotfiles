@@ -22,3 +22,4 @@
     - graphql.vscode-graphql
     - redhat.vscode-yaml
     - vscode-icons-team.vscode-icons
+    - ms-azuretools.vscode-docker

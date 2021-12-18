@@ -1,0 +1,6 @@
+- name: install sway
+  pacman:
+    name:
+      - sway
+      - wlroots
+  become: yes

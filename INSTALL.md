@@ -93,3 +93,11 @@ initrd   /intel-ucode.img
 initrd   /initramfs-linux.img
 ...
 ```
+
+#### Intel hardware video accel
+
+Install `intel-media-driver`
+
+#### Intel vulkan support
+
+Install `vulkan-intel`

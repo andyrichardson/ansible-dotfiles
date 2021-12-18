@@ -1,0 +1,33 @@
+- name: Set node version
+  set_fact:
+    version: v16.13.1
+
+- name: install node
+  shell: |
+    source ~/.nvm/nvm.sh
+    nvm install {{ version }}
+    nvm use {{ version }}
+    npm i -g yarn neovim
+  args:
+    creates: /home/{{ user }}/.nvm/versions/node/{{ version }}
+
+- name: Link node binary globally
+  file:
+    src: /home/{{ user }}/.nvm/versions/node/{{ version }}/bin/node
+    dest: /bin/node
+    state: link
+  become: yes
+
+- name: Link npm binary globally
+  file:
+    src: /home/{{ user }}/.nvm/versions/node/{{ version }}/bin/npm
+    dest: /bin/npm
+    state: link
+  become: yes
+
+- name: Link yarn binary globally
+  file:
+    src: /home/{{ user }}/.nvm/versions/node/{{ version }}/bin/yarn
+    dest: /bin/yarn
+    state: link
+  become: yes

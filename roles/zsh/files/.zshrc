@@ -31,3 +31,9 @@ source ~/.p10k.zsh
 # Load completions
 autoload -U compinit && compinit
 
+bindkey "$terminfo[kcuu1]" history-substring-search-up
+bindkey "$terminfo[kcud1]" history-substring-search-down
+
+export WASMTIME_HOME="$HOME/.wasmtime"
+
+export PATH="$WASMTIME_HOME/bin:$PATH"

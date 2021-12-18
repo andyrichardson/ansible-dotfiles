@@ -10,6 +10,8 @@
       - visual-studio-code-bin
       - google-chrome
       - reaper-bin
+      - figma-linux
+      - slack-wayland # restore to slack-desktop in the future
     state: present
 
 - name: Add flatpak repo - flathub
@@ -34,18 +36,62 @@
       - com.discordapp.Discord
       - com.github.wwmm.easyeffects
       - com.parsecgaming.parsec
-      - com.slack.Slack
       # - com.uploadedlobster.peek # broken - https://github.com/phw/peek/issues/748
       - com.valvesoftware.Steam
-      - io.github.Figma_Linux.figma_linux
       - io.github.seadve.Kooha
       - org.gimp.GIMP
       - org.gnome.font-viewer
       - org.qbittorrent.qBittorrent
       - org.videolan.VLC
       - rest.insomnia.Insomnia
-      - us.zoom.Zoom
       - org.gtk.Gtk3theme.Adwaita-dark
-      - https://downloads.1password.com/linux/flatpak/1Password.flatpakref
     state: present
     method: user
+
+- name: install 1password
+  flatpak:
+    name: https://downloads.1password.com/linux/flatpak/1Password.flatpakref
+    state: present
+    method: user
+  ignore_errors: yes
+
+- name: configure chrome for wayland
+  lineinfile:
+    path: /usr/share/applications/google-chrome.desktop
+    regexp: '^Exec=/usr/bin/google-chrome-stable %U$'
+    line: 'Exec=/usr/bin/google-chrome-stable --enable-features=UseOzonePlatform --ozone-platform=wayland --ignore-gpu-blocklist --enable-gpu-rasterization --enable-zero-copy --enable-features=VaapiVideoDecoder'
+    state: present
+  become: yes
+
+- name: configure code for wayland
+  lineinfile:
+    path: /usr/share/applications/visual-studio-code.desktop
+    regexp: '^Exec=/opt/visual-studio-code/code --no-sandbox --unity-launch %F$'
+    line: 'Exec=/opt/visual-studio-code/code --enable-features=UseOzonePlatform --ozone-platform=wayland --no-sandbox --unity-launch %F'
+    state: present
+  become: yes
+
+- name: configure figma for wayland
+  lineinfile:
+    path: /usr/share/applications/figma-linux.desktop
+    regexp: '^(Exec=/opt/figma-linux/figma-linux) (--no-sandbox.*)'
+    line: '\1 --enable-features=UseOzonePlatform --ozone-platform=wayland \2'
+    backrefs: yes
+    state: present
+  become: yes
+
+- name: configure qt env for wayland
+  lineinfile:
+    path: /etc/environment
+    regexp: '^QT_QPA_PLATFORM=wayland$'
+    line: 'QT_QPA_PLATFORM=wayland'
+    state: present
+  become: yes
+
+- name: configure clutter env for wayland
+  lineinfile:
+    path: /etc/environment
+    regexp: '^CLUTTER_BACKEND=wayland$'
+    line: 'CLUTTER_BACKEND=wayland'
+    state: present
+  become: yes

@@ -1,0 +1,6 @@
+{
+  "explorer.icon.enableNerdfont": true,
+  "explorer.file.showHiddenFiles": true,
+  "list.source.files.args": ["--hidden", "--files"],
+  "list.source.grep.args": ["--hidden"]
+}

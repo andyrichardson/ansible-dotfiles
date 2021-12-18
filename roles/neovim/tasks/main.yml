@@ -15,19 +15,16 @@
   args:
     creates: /home/{{ user }}/.local/share/nvim/site/autoload/plug.vim
 
-- name: Install node & yarn
-  shell: |
-    source ~/.nvm/nvm.sh
-    nvm install 14
-    nvm use 14
-    npm i -g yarn neovim
-  args:
-    creates: /home/{{ user }}/.nvm/versions/node/v14*
-
 - name: Link vim config file (vim)
   file:
     src: "{{ role_path }}/files/.vimrc"
     dest: "/home/{{ user }}/.vimrc"
+    state: link
+
+- name: link coc config file
+  file:
+    src: "{{ role_path }}/files/coc-settings.json"
+    dest: "/home/{{ user }}/.config/nvim/coc-settings.json"
     state: link
 
 - name: Create config directory (nvim)

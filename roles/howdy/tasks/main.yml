@@ -10,3 +10,10 @@
     regexp: '^device_path'
     line: 'device_path = /dev/video2'
   become: yes
+
+# - name: Set graphical login pam rule
+#   lineinfile:
+#     path: /etc/pam.d/system-local-login
+#     regexp: 'howdy\/pam.py$'
+#     line: 'auth sufficient pam_python.so /lib/security/howdy/pam.py'
+#   become: yes
