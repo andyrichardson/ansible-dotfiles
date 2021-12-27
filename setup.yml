@@ -2,8 +2,9 @@
   hosts: localhost
   vars:
     user: andy
-    email: EMAIL
+    email: andy.john.richardson@gmail.com
   roles:
+    - sway
     - fonts
     - applications
     - node

@@ -3,4 +3,9 @@
     name: 
       - nerd-fonts-dejavu-complete
       - noto-fonts-emoji
+      - ttf-roboto
+      - ttf-roboto-mono
+      - ttf-opensans
+      - otf-overpass
+      - noto-fonts
     state: present

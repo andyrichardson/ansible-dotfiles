@@ -1,10 +1,10 @@
 call plug#begin()
-Plug 'preservim/nerdtree'
 Plug 'navarasu/onedark.nvim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-prettier', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
-Plug 'weirongxu/coc-explorer', {'do': 'yarn install --frozen-lockfile > ~/coclog'}
+Plug 'weirongxu/coc-explorer', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-lists', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-html', {'do': 'yarn install --frozen-lockfile'}
@@ -22,21 +22,26 @@ Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
 Plug 'iamcco/coc-svg', {'do': 'yarn install --frozen-lockfile'}
 Plug 'kkiyama117/coc-toml', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'chriskempson/base16-vim'
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
+Plug 'jparise/vim-graphql'
+Plug 'folke/which-key.nvim'
 call plug#end()
 
 colorscheme onedark
 "set termguicolors
 set winblend=15
 set relativenumber
+set updatetime=750
 syntax on
 
 imap jj <Esc>
 
-let mapleader = "\<space>"
+set tabstop=2 shiftwidth=2 softtabstop
+
+" let mapleader = "\<space>"
 nnoremap <space> <Nop>
 map <space> <leader>
+map <backspace> :WhichKey<CR>
 
 map <C-N> :CocCommand explorer<CR>
 map <A-N> :CocCommand explorer<CR>
@@ -51,5 +56,68 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
+" Changing operations
+nmap <leader>cf <Plug>(coc-format-selected) 
+nmap <leader>cF <Plug>(coc-format)
+nmap <leader>cr <Plug>(coc-rename)
+
 " Clear search
 nnoremap <leader>/ :noh<return>
+
+" Make <CR> auto-select the first completion item 
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" Use K to show documentation in preview window.
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
+
+lua << EOF
+  local wk = require("which-key")
+  wk.setup {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
+  }
+
+  wk.register({
+	  name = "Leader",
+    ["/"] = "Hide highlighting",
+		l = {
+ 			name = "+List",
+		  f = "files",
+			t = "text"
+		},
+	  c = {
+			name = "+Change",
+			f = "format (line/selection)",
+			F = "format (file)",
+		  r = "rename symbol"	
+		}
+	}, { prefix = "<leader>" })
+
+  wk.register({
+    d = "definition (lang server)",
+		y = "type definition (lang server)",
+		i = "implementation (lang server)",
+		r = "references (lang server)"
+	}, { prefix = "g" })
+
+  wk.register({
+    K = "Show documentation (lang server)"
+	})
+EOF

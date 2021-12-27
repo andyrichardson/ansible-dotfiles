@@ -4,3 +4,15 @@
       - sway
       - wlroots
   become: yes
+
+- name: make sway config dir
+  file:
+    dest: "/home/{{ user }}/.config/sway"
+    state: directory
+
+- name: Add sway config to home
+  file:
+    src: "{{ role_path }}/files/config"
+    dest: "/home/{{ user }}/.config/sway/config"
+    state: link
+

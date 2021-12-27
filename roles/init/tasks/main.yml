@@ -146,6 +146,7 @@
       - gnome-tweak-tool
       - gnome-themes-extra
       - flatpak
+      - wl-clipboard
     update_cache: yes
     state: present
 
