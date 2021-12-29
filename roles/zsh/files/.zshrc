@@ -4,6 +4,10 @@ source $HOME/.antigen/antigen.zsh
 export EDITOR=nvim
 export NVM_LAZY_LOAD=true
 export NVM_COMPLETION=true 
+export LESS='-R --use-color -Dd+r$Du+b'
+
+# Color support
+[[ -s "/etc/grc.zsh" ]] && source /etc/grc.zsh
 
 antigen use oh-my-zsh
 
