@@ -2,5 +2,12 @@
   "explorer.icon.enableNerdfont": true,
   "explorer.file.showHiddenFiles": true,
   "list.source.files.args": ["--hidden", "--files"],
-  "list.source.grep.args": ["--hidden"]
+  "list.source.grep.args": ["--hidden"],
+  "git.addGBlameToVirtualText": true,
+  "coc.preferences.formatOnType": true,
+  "cSpell.userWords": [
+    "Unmount",
+    "premount"
+  ],
+	"prettier.formatterPriority": 10
 }

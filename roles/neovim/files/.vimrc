@@ -22,6 +22,7 @@ Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
 Plug 'iamcco/coc-svg', {'do': 'yarn install --frozen-lockfile'}
 Plug 'kkiyama117/coc-toml', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
+Plug 'iamcco/coc-spell-checker', {'do': 'yarn install --frozen-lockfile'}
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'jparise/vim-graphql'
 Plug 'folke/which-key.nvim'
@@ -32,16 +33,23 @@ colorscheme onedark
 set winblend=15
 set relativenumber
 set updatetime=750
+set mouse=a
+"set clipboard=unnamedplus
+set showbreak=>> breakat=\ :,; breakindent
+set tabstop=2 shiftwidth=2 softtabstop expandtab
 syntax on
 
-imap jj <Esc>
+let g:coc_disable_transparent_cursor = 1
 
-set tabstop=2 shiftwidth=2 softtabstop
+imap jj <Esc>
 
 " let mapleader = "\<space>"
 nnoremap <space> <Nop>
 map <space> <leader>
 map <backspace> :WhichKey<CR>
+
+" Reload config
+nnoremap <leader>_ :source ~/.vimrc<CR>
 
 map <C-N> :CocCommand explorer<CR>
 map <A-N> :CocCommand explorer<CR>
@@ -60,6 +68,8 @@ nmap <silent> gr <Plug>(coc-references)
 nmap <leader>cf <Plug>(coc-format-selected) 
 nmap <leader>cF <Plug>(coc-format)
 nmap <leader>cr <Plug>(coc-rename)
+xmap <leader>ca <Plug>(coc-codeaction-selected)
+nmap <leader>ca v<Plug>(coc-codeaction-selected)
 
 " Clear search
 nnoremap <leader>/ :noh<return>
@@ -86,6 +96,27 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 " Add `:Format` command to format current buffer.
 command! -nargs=0 Format :call CocAction('format')
 
+" Git commands
+nmap [g <Plug>(coc-git-prevchunk)
+nmap ]g <Plug>(coc-git-nextchunk)
+nmap [c <Plug>(coc-git-prevconflict)
+nmap ]c <Plug>(coc-git-nextconflict)
+" show chunk diff at current position
+nmap gs <Plug>(coc-git-chunkinfo)
+" show commit contains current position
+nmap gc <Plug>(coc-git-commit)
+" create text object for git chunks
+omap ig <Plug>(coc-git-chunk-inner)
+xmap ig <Plug>(coc-git-chunk-inner)
+omap ag <Plug>(coc-git-chunk-outer)
+xmap ag <Plug>(coc-git-chunk-outer)
+
+nnoremap <leader>vw :CocCommand git.copyUrl<CR>
+nnoremap <leader>v, :CocCommand git.keepIncoming<CR>
+nnoremap <leader>v. :CocCommand git.keepCurrent<CR>
+nnoremap <leader>va :CocCommand git.chunkStage<CR>
+nnoremap <leader>vc <Plug>(coc-git-commit)
+
 lua << EOF
   local wk = require("which-key")
   wk.setup {
@@ -97,6 +128,7 @@ lua << EOF
   wk.register({
 	  name = "Leader",
     ["/"] = "Hide highlighting",
+    ["_"] = "Reload .vimrc",
 		l = {
  			name = "+List",
 		  f = "files",
@@ -104,10 +136,19 @@ lua << EOF
 		},
 	  c = {
 			name = "+Change",
+			a = "action",
 			f = "format (line/selection)",
 			F = "format (file)",
 		  r = "rename symbol"	
-		}
+		},
+    v = {
+      name = "+VersionControl",
+      a = "Stage chunk (add)",
+      c = "Commit",
+      w = "Copy url",
+      [","] = "Keep incoming (conflict)",
+      ["."] = "Keep current (conflict)"
+    }
 	}, { prefix = "<leader>" })
 
   wk.register({
