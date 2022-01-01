@@ -1,0 +1,26 @@
+- name: Crate config folder
+  file:
+    dest: "/etc/systemd/resolved.conf.d"
+    state: directory
+  become: yes
+
+- name: add dns config
+  file:
+    src: "{{ role_path}}/files/dns_over_tls.conf"
+    dest: /etc/systemd/resolved.conf.d/dns_over_tls.conf
+    state: hard
+  become: yes
+
+- name: add nm config
+  file:
+    src: "{{ role_path}}/files/systemd-resolved.conf"
+    dest: /etc/NetworkManager/conf.d/systemd-resolved.conf
+    state: link
+  become: yes
+
+- name: enable systemd-resolved service
+  systemd:
+    name: systemd-resolved
+    state: started
+    enabled: yes
+  become: yes

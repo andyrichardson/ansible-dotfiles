@@ -4,6 +4,7 @@
     user: andy
     email: andy.john.richardson@gmail.com
   roles:
+    - network
     - sway
     - fonts
     - applications

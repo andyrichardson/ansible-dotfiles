@@ -82,6 +82,7 @@
       - bash-completion
       - pkgstats
       - arch-wiki-lite
+      - dnsutils
       # Archiving utilities
       - zip
       - unzip
