@@ -139,6 +139,7 @@
       - freetype2
       - noto-fonts-emoji
       # other
+      - reflector
       - lshw
       - man-db
       - go
@@ -177,4 +178,24 @@
 - name: Enable gdm service
   systemd:
     name: gdm
+    enabled: yes
+
+- name: Add reflector options
+  copy:
+    dest: /etc/xdg/reflector/reflector.conf
+    content: |
+      --save /etc/pacman.d/mirrorlist
+      -c GB,FR
+      -p https
+      -n 20
+
+- name: Enable reflector timer (weekly)
+  systemd:
+    name: reflector.timer
+    enabled: yes
+
+- name: Enable reflector service (run now + on boot)
+  systemd:
+    name: reflector.timer
+    state: started
     enabled: yes
