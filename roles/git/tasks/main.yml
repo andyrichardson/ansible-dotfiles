@@ -10,6 +10,18 @@
     scope: global
     value: "Andy Richardson"
 
+- name: git signing key
+  git_config:
+    name: user.signingkey
+    scope: global
+    value: "04A71A321092BD39"
+
+- name: git commit sign default
+  git_config:
+    name: commit.gpgsign
+    scope: global
+    value: "true"
+
 - name: git editor
   git_config:
     name: core.editor
