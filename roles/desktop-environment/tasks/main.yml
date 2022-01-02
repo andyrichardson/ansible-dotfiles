@@ -11,6 +11,7 @@
       - gnome-shell-extension-pop-shell-bin
       - gnome-shell-extension-just-perfection-desktop-git
       - gnome-shell-extension-emoji-selector-git
+      - gnome-shell-extension-caffeine-git
       - gnome-shell-extension-appindicator
     state: present
 
