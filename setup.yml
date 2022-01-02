@@ -4,21 +4,57 @@
     user: andy
     email: andy.john.richardson@gmail.com
   roles:
-    - network
-    - sway
-    - fonts
-    - applications
-    - node
-    - utils
-    - undervolt
-    - howdy
-    - desktop-environment
-    - alacritty
-    - code
-    - git
-    - docker
-    - virtualization
-    - rust
-    - zsh
-    - tmux
-    - neovim
+    - role: network
+      tags: 
+        - network
+    - role: sway
+      tags:
+        - sway
+    - role: fonts
+      tags:
+        - fonts
+    - role: applications
+      tags:
+        - applications
+    - role: node
+      tags:
+        - node
+    - role: utils
+      tags:
+        - utils
+    - role: undervolt
+      tags:
+        - undervolt
+    - role: howdy
+      tags:
+        - howdy
+    - role: desktop-environment
+      tags:
+        - desktop
+    - role: alacritty
+      tags:
+        - alacritty
+    - role: code
+      tags:
+        - code
+    - role: git
+      tags:
+        - git
+    - role: docker
+      tags:
+        - docker
+    - role: virtualization
+      tags:
+        - virtualization
+    - role: rust
+      tags:
+        - rust
+    - role: zsh
+      tags:
+        - zsh
+    - role: tmux
+      tags:
+        - tmux
+    - role: neovim
+      tags:
+        - neovim
