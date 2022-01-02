@@ -11,9 +11,10 @@
     line: 'device_path = /dev/video2'
   become: yes
 
-# - name: Set graphical login pam rule
-#   lineinfile:
-#     path: /etc/pam.d/system-local-login
-#     regexp: 'howdy\/pam.py$'
-#     line: 'auth sufficient pam_python.so /lib/security/howdy/pam.py'
-#   become: yes
+- name: Use howdy for pkexec
+  lineinfile:
+    path: /etc/pam.d/polkit-1
+    regexp: '^auth\s+sufficient\s+pam_python.so\s+\/lib\/security\/howdy\/pam.py'
+    insertbefore: '^auth\s+include\s+system-auth$'
+    line: 'auth       sufficient   pam_python.so /lib/security/howdy/pam.py'
+  become: yes
