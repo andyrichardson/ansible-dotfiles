@@ -33,6 +33,12 @@ call plug#begin()
   Plug 'jparise/vim-graphql'
   "{Other}"
   Plug 'folke/which-key.nvim'
+  Plug 'preservim/nerdtree'
+  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+  Plug 'Xuyuanp/nerdtree-git-plugin'
+  Plug 'ryanoasis/vim-devicons'
+  Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
+  Plug 'vn-ki/coc-clap'
 call plug#end()
 
 
@@ -79,16 +85,37 @@ nnoremap <leader>/ :noh<return>
 " CocExplorer/List
 """""""""""""""""""""""""""""""""""""""
 let g:coc_disable_transparent_cursor = 1
-map <C-N> :CocCommand explorer<CR>
-map <A-N> :CocCommand explorer<CR>
-map <leader>lf :CocList files<CR>
-map <leader>lt :CocList grep<CR>
+"map <C-N> :CocCommand explorer :getcwd() --position floating<CR>
+map <C-N> :NERDTreeToggle<CR>
+
+let g:NERDTreeGitStatusUseNerdFonts = 1
+let g:NERDTreeShowHidden=1
+let g:NERDTreeMapOpenSplit="os"
+let g:NERDTreeMapOpenVSplit="ov"
+
+map <leader>ll :Clap<CR>
+map <leader>lf :Clap files<CR>
+map <leader>lg :Clap grep2<CR>
+map <leader>lb :Clap blines<CR>
+map <leader>ly :Clap yanks<CR>
+map <leader>lr :Clap registers<CR>
+map <leader>lv :Clap bcommits<CR>
+map <leader>lj :Clap jumps<CR>
 
 """""""""""""""""""""""""""""""""""""""
 " Coc mappings
 """""""""""""""""""""""""""""""""""""""
 " Definition traversal
-nmap <silent> gd <Plug>(coc-definition)
+fun! GoToDefinition()
+  if &ft =~ 'man\|help'
+    execute 'tag '.expand('<cword>')
+    return
+  endif
+ 
+  execute "normal \<Plug>(coc-definition)"
+endfun
+
+nmap <silent> gd :call GoToDefinition()<CR>
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
@@ -133,9 +160,15 @@ lua << EOF
     ["/"] = "Hide highlighting",
     ["_"] = "Reload .vimrc",
 		l = {
- 			name = "+List",
-		  f = "files",
-			t = "text"
+      name = "+List",
+      l = "clap providers",
+      f = "files",
+      g = "grep",
+      b = "grep (buffer)",
+      y = "yanks",
+      r = "registers",
+      v = "vcs commits",
+      j = "jumps"
 		},
 	  c = {
 			name = "+Change",
