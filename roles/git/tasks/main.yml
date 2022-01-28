@@ -22,6 +22,12 @@
     scope: global
     value: "true"
 
+- name: git rebase default
+  git_config:
+    name: pull.rebase
+    scope: global
+    value: "false"
+
 - name: git editor
   git_config:
     name: core.editor

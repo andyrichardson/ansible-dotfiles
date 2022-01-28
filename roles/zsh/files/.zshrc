@@ -1,13 +1,16 @@
 source $HOME/.antigen/antigen.zsh
 
 # Environment
-export EDITOR=nvim
 export NVM_LAZY_LOAD=true
 export NVM_COMPLETION=true 
-export LESS='-R --use-color -Dd+r$Du+b'
+export DENO_INSTALL=$HOME/.deno
+export EDITOR=nvim
+export MANPAGER='nvim +Man!'
+
+# alias less=/usr/share/nvim/runtime/macros/less.sh
 
 # Color support
-[[ -s "/etc/grc.zsh" ]] && source /etc/grc.zsh
+# [[ -s "/etc/grc.zsh" ]] && source /etc/grc.zsh
 
 antigen use oh-my-zsh
 
@@ -41,3 +44,4 @@ bindkey "$terminfo[kcud1]" history-substring-search-down
 export WASMTIME_HOME="$HOME/.wasmtime"
 
 export PATH="$WASMTIME_HOME/bin:$PATH"
+export PATH="$DENO_INSTALL/bin:$PATH"

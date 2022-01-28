@@ -7,9 +7,9 @@
   lineinfile:
     dest: /etc/sudoers
     state: present
-    regexp: '^%wheel'
-    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
-    validate: 'visudo -cf %s'
+    regexp: "^%wheel"
+    line: "%wheel ALL=(ALL) NOPASSWD: ALL"
+    validate: "visudo -cf %s"
 
 - name: Add user
   ansible.builtin.user:
@@ -119,7 +119,7 @@
       - network-manager-applet
       - nm-connection-editor
       - gnome-keyring
-      - dnsmasq 
+      - dnsmasq
       - openvpn
       - nfs-utils
       - avahi
@@ -199,3 +199,10 @@
     name: reflector.timer
     state: started
     enabled: yes
+
+- name: Set VDPAU_DRIVER (intel)
+  lineinfile:
+    dest: /etc/environment
+    state: present
+    regexp: "^VDPAU_DRIVER"
+    line: "VDPAU_DRIVER=va_gl"

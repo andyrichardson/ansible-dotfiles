@@ -1,7 +1,7 @@
 """""""""""""""""""""""""""""""""""""""
 " Plugins
 """""""""""""""""""""""""""""""""""""""
-call plug#begin()
+call plug#begin('~/.config/nvim/plugged')
   "{Theming}"
   Plug 'navarasu/onedark.nvim'
   "{Coc plugins}"
@@ -31,17 +31,18 @@ call plug#begin()
   "{Additional lang support}"
   Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
   Plug 'jparise/vim-graphql'
-  "{Other}"
-  Plug 'folke/which-key.nvim'
+  "{NerdTree}"
   Plug 'preservim/nerdtree'
   Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
   Plug 'Xuyuanp/nerdtree-git-plugin'
   Plug 'ryanoasis/vim-devicons'
+  "{Clap}"
   Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
   Plug 'vn-ki/coc-clap'
+  "{Other}"
+  Plug 'folke/which-key.nvim'
+  Plug 'nvim-lualine/lualine.nvim'
 call plug#end()
-
-
 
 """""""""""""""""""""""""""""""""""""""
 " General settings
@@ -102,6 +103,9 @@ map <leader>lr :Clap registers<CR>
 map <leader>lv :Clap bcommits<CR>
 map <leader>lj :Clap jumps<CR>
 
+let g:clap_current_selection_sign={ 'text': '', 'texthl': "ClapCurrentSelectionSign", "linehl": "ClapCurrentSelection"}
+let g:clap_layout = { 'relative': 'editor' }
+let g:clap_open_action = { 'ctrl-s': 'split', 'ctrl-v': 'vsplit'}
 """""""""""""""""""""""""""""""""""""""
 " Coc mappings
 """""""""""""""""""""""""""""""""""""""
@@ -114,6 +118,8 @@ fun! GoToDefinition()
  
   execute "normal \<Plug>(coc-definition)"
 endfun
+
+inoremap <silent><expr> <C-k> coc#refresh()
 
 nmap <silent> gd :call GoToDefinition()<CR>
 nmap <silent> gy <Plug>(coc-type-definition)
@@ -223,3 +229,10 @@ function! s:show_documentation()
 endfunction
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
+
+""""""""""""""""""""""""""""""""""""""""
+" Lualine
+"""""""""""""""""""""""""""""""""""""""
+lua << END
+require('lualine').setup()
+END

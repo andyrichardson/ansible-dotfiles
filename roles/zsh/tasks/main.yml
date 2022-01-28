@@ -1,17 +1,18 @@
 - name: install packages
   pacman:
-    name: 
-     - zsh
-     - powerline
+    name:
+      - zsh
+      - powerline
     state: present
   become: yes
 
 - name: add syntax
   kewlfft.aur.aur:
-    name: 
+    name:
       - bat
       - grc
       - source-highlight
+      - dvm-bin
     state: present
 
 - stat:
@@ -41,6 +42,6 @@
 - name: Enable colors for pacman
   lineinfile:
     path: /etc/pacman.conf
-    regexp: '^#Color'
-    line: 'Color' 
+    regexp: "^#Color"
+    line: "Color"
   become: yes

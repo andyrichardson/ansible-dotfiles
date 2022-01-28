@@ -13,6 +13,8 @@
       - gnome-shell-extension-emoji-selector-git
       - gnome-shell-extension-caffeine-git
       - gnome-shell-extension-appindicator
+      - gnome-shell-extension-sound-output-device-chooser-git
+      - gnome-shell-extension-simply-workspaces-git
     state: present
 
 # - name: Install simply workspaces
@@ -24,5 +26,6 @@
   git:
     repo: https://github.com/andyrichardson/shade-inactive-windows.git
     dest: /home/{{ user }}/.local/share/gnome-shell/extensions/shade-inactive-windows@hepaajan.iki.fi
+
 - name: Load dconf config
   shell: dconf load / < {{ role_path }}/files/dconf.conf
