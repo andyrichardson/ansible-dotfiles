@@ -1,8 +1,14 @@
+- name: check for logind.conf
+  stat:
+    path: /etc/systemd/logind.conf
+  register: logind_conf
+
 - name: remove logind.conf
   file:
     path: /etc/systemd/logind.conf
     state: absent
   become: yes
+  when: logind_conf.stat.islnk == False
 
 - name: add systemd logind.conf (lid close)
   file:
@@ -11,15 +17,29 @@
     state: link
   become: yes
 
+- name: check for sleep.conf
+  stat:
+    path: /etc/systemd/logind.conf
+  register: sleep_conf
+
 - name: remove systemd sleep.conf
   file:
     path: /etc/systemd/sleep.conf
     state: absent
   become: yes
+  when: sleep_conf.stat.islnk == False
 
 - name: add sleep.conf
   file:
     src: "{{ role_path}}/files/sleep.conf"
     dest: /etc/systemd/sleep.conf
     state: link
+  become: yes
+
+- name: use hibernate on battery loss
+  lineinfile:
+    path: /etc/UPower/UPower.conf
+    regexp: "^CriticalPowerAction="
+    line: "CriticalPowerAction=Hibernate"
+    state: present
   become: yes
