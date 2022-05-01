@@ -4,8 +4,11 @@
     user: andy
     email: andy.john.richardson@gmail.com
   roles:
+    - role: power
+      tags:
+        - power
     - role: network
-      tags: 
+      tags:
         - network
     - role: sway
       tags:

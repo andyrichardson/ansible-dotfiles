@@ -1,0 +1,25 @@
+- name: remove logind.conf
+  file:
+    path: /etc/systemd/logind.conf
+    state: absent
+  become: yes
+
+- name: add systemd logind.conf (lid close)
+  file:
+    src: "{{ role_path}}/files/logind.conf"
+    dest: /etc/systemd/logind.conf
+    state: link
+  become: yes
+
+- name: remove systemd sleep.conf
+  file:
+    path: /etc/systemd/sleep.conf
+    state: absent
+  become: yes
+
+- name: add sleep.conf
+  file:
+    src: "{{ role_path}}/files/sleep.conf"
+    dest: /etc/systemd/sleep.conf
+    state: link
+  become: yes

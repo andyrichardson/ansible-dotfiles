@@ -53,6 +53,7 @@
       - libmtp
       - fwupd
       - usbutils
+      - acpid
       # Privilege escalation
       - sudo
       # Audio
