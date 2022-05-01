@@ -75,12 +75,22 @@ Add boot config to `/boot/loader/entries/arch.conf`
 title    Arch
 linux    /vmlinuz-linux
 initrd   /initramfs-linux.img
-options  rd.luks.name=<uuid>=cryptroot root=/dev/mapper/cryptroot rw
+options  rd.luks.name=<uuid>=cryptroot
+options  root=/dev/mapper/cryptroot rw
+
 ```
 
 > Use `cryptsetup luksUUID /dev/<device> >> /.../arch.conf` to get uuid
 
 ## Additional (optional)
+
+#### Hibernation
+
+Add the `resume` argument with the swap partition
+
+```
+options  resume=/dev/<swap-partition>     # For hibernation (e.g nvme1n1p2)
+```
 
 #### Intel microcode
 
