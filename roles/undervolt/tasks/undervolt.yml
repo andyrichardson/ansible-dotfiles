@@ -1,8 +1,0 @@
-- name: install undervolt
-  kewlfft.aur.aur:
-    name: python-undervolt
-    state: present
-
-- name: apply undervolt
-  command: undervolt --core -80 --cache -80
-  become: yes

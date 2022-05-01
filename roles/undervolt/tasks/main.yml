@@ -1,0 +1,30 @@
+- name: install intel-undervolt
+  pacman:
+    name: intel-undervolt
+    state: present
+
+- name: check for config file
+  stat:
+    path: /etc/intel-undervolt.conf
+  register: config
+
+- name: remove template config
+  file:
+    path: /etc/intel-undervolt.conf
+    state: absent
+  become: yes
+  when: config.stat.islnk == False
+
+- name: add config
+  file:
+    src: "{{ role_path}}/files/intel-undervolt.conf"
+    dest: /etc/intel-undervolt.conf
+    state: link
+  become: yes
+
+- name: enable service
+  systemd:
+    name: intel-undervolt
+    state: started
+    enabled: yes
+  become: yes
