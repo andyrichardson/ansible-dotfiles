@@ -28,6 +28,9 @@
     - role: undervolt
       tags:
         - undervolt
+    - role: fuse
+      tags:
+        - fuse
     - role: howdy
       tags:
         - howdy

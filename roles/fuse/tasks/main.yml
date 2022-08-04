@@ -1,0 +1,8 @@
+# Allows 'fuser' command on root account
+- name: Add "user_allow_other" to fuse config
+  lineinfile:
+    dest: /etc/fuse.conf
+    state: present
+    regexp: "#user_allow_other"
+    line: "user_allow_other"
+  become: yes
