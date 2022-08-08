@@ -1,18 +1,24 @@
 - name: Install apps (pacman)
   pacman:
     name:
+      - dconf-editor
+      - discord
+      - easyeffects
+      - peek
       - screenkey
+      - vlc
   become: yes
 
 - name: install apps (aur)
   kewlfft.aur.aur:
     name:
-      - visual-studio-code-bin
-      - google-chrome
-      - reaper-bin
       - figma-linux
+      - google-chrome
+      - parsec-bin
+      - reaper-bin
       #- slack-wayland # restore to slack-desktop in the future
       - slack-desktop
+      - visual-studio-code-bin
     state: present
 
 - name: Add flatpak repo - flathub
@@ -33,17 +39,9 @@
 - name: install apps (flatpak)
   flatpak:
     name:
-      - ca.desrt.dconf-editor
-      - com.discordapp.Discord
-      - com.github.wwmm.easyeffects
-      - com.parsecgaming.parsec
-      # - com.uploadedlobster.peek # broken - https://github.com/phw/peek/issues/748
-      - com.valvesoftware.Steam
       - io.github.seadve.Kooha
       - org.gimp.GIMP
-      - org.gnome.font-viewer
       - org.qbittorrent.qBittorrent
-      - org.videolan.VLC
       - rest.insomnia.Insomnia
       - org.gtk.Gtk3theme.Adwaita-dark
     state: present
