@@ -96,12 +96,13 @@ let g:NERDTreeMapOpenVSplit="ov"
 
 map <leader>ll :Clap<CR>
 map <leader>lf :Clap files<CR>
-map <leader>lg :Clap grep2<CR>
+map <leader>lg :Clap grep<CR>
 map <leader>lb :Clap blines<CR>
 map <leader>ly :Clap yanks<CR>
 map <leader>lr :Clap registers<CR>
 map <leader>lv :Clap bcommits<CR>
 map <leader>lj :Clap jumps<CR>
+map <leader>lm :Clap maps<CR>
 
 let g:clap_current_selection_sign={ 'text': '', 'texthl': "ClapCurrentSelectionSign", "linehl": "ClapCurrentSelection"}
 let g:clap_layout = { 'relative': 'editor' }
@@ -174,7 +175,8 @@ lua << EOF
       y = "yanks",
       r = "registers",
       v = "vcs commits",
-      j = "jumps"
+      j = "jumps",
+      m = "maps"
 		},
 	  c = {
 			name = "+Change",
