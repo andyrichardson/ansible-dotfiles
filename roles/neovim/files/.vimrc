@@ -42,6 +42,7 @@ call plug#begin('~/.config/nvim/plugged')
   "{Other}"
   Plug 'folke/which-key.nvim'
   Plug 'nvim-lualine/lualine.nvim'
+  Plug 'tpope/vim-commentary'
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""
@@ -150,6 +151,10 @@ nnoremap <leader>v, :CocCommand git.keepIncoming<CR>
 nnoremap <leader>v. :CocCommand git.keepCurrent<CR>
 nnoremap <leader>va :CocCommand git.chunkStage<CR>
 nnoremap <leader>vc <Plug>(coc-git-commit)
+
+" Comment toggles
+vnoremap <leader>c/ <Plug>Commentary
+nnoremap <leader>c/ <Plug>CommentaryLine
 
 """""""""""""""""""""""""""""""""""""""
 " WhichKey
