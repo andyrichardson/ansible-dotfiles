@@ -35,18 +35,13 @@ call plug#begin('~/.config/nvim/plugged')
   "{Additional lang support}"
   Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
   Plug 'jparise/vim-graphql'
-  Plug 'nvim-tree/nvim-web-devicons'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-  "{NerdTree}"
-  " Plug 'preservim/nerdtree'
-  " Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-  " Plug 'Xuyuanp/nerdtree-git-plugin'
+  "{VimTree}"
   Plug 'ryanoasis/vim-devicons'
+  Plug 'nvim-tree/nvim-web-devicons'
   Plug 'nvim-tree/nvim-tree.lua'
-
   "{Clap}"
   Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
-  Plug 'vn-ki/coc-clap'
   Plug 'nvim-lua/plenary.nvim'
   Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
   Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
@@ -169,7 +164,9 @@ map <C-N> :NvimTreeFindFileToggle<CR>
 lua << END
   local function find_in_folder(node)
     local path = (node.type == "file") and node.parent.absolute_path or node.absolute_path;
-    vim.cmd(string.format("Clap grep %s %s", "%s", path)) 
+    require("telescope.builtin").live_grep({
+      cwd = path
+    })
   end 
   
   -- disable netrw at the very start of your init.lua (strongly advised)
@@ -240,16 +237,11 @@ END
 map <leader>ll :Telescope builtin include_extensions=true<CR>
 map <leader>lf :Telescope fd<CR>
 map <leader>lg :Telescope live_grep<CR>
-map <leader>lb :Clap blines<CR>
 map <leader>ly :Telescope yank_history<CR>
-map <leader>lr :Clap registers<CR>
-map <leader>lv :Clap bcommits<CR>
-map <leader>lj :Clap jumps<CR>
-map <leader>lm :Clap maps<CR>
-
-let g:clap_current_selection_sign={ 'text': '', 'texthl': "ClapCurrentSelectionSign", "linehl": "ClapCurrentSelection"}
-let g:clap_layout = { 'relative': 'editor' }
-let g:clap_open_action = { 'ctrl-s': 'split', 'ctrl-v': 'vsplit'}
+map <leader>lr :Telescope registers<CR>
+map <leader>lv :Telescope git_bcommits<CR>
+map <leader>lj :Telescope jumplist<CR>
+map <leader>lm :Telescope keymaps<CR>
 
 lua << END
   local telescope = require('telescope')
@@ -264,7 +256,12 @@ lua << END
         }
       },
       borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
-      results_title = false
+      results_title = false,
+      mappings = {
+        i = {
+          ["<C-s>"] = require('telescope.actions').select_horizontal
+        }
+      }
     },
     extensions = {
       fzf = {
