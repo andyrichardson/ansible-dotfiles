@@ -4,9 +4,9 @@ require('packer').startup(
     use({ 'navarasu/onedark.nvim' })
     -- Coc plugins
     use({ 'neoclide/coc.nvim', branch = 'release', disable = false })
+    use({ 'neoclide/coc-highlight', run = 'yarn install --frozen-lockfile' })
     use({ 'neoclide/coc-tsserver', run = 'yarn install --frozen-lockfile' })
     use({ 'xiyaowong/coc-sumneko-lua', run = 'yarn install --frozen-lockfile' })
-    use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
     use({ 'neoclide/coc-tsserver', run = 'yarn install --frozen-lockfile' })
     use({ 'neoclide/coc-prettier', run = 'yarn install --frozen-lockfile' })
     use({ 'neoclide/coc-json', run = 'yarn install --frozen-lockfile' })
@@ -31,13 +31,10 @@ require('packer').startup(
     use({ 'neoclide/coc-yaml', run = 'yarn install --frozen-lockfile' })
     use({ 'neoclide/coc-pairs', run = 'yarn install --frozen-lockfile' })
     use({ 'iamcco/coc-spell-checker', run = 'yarn install --frozen-lockfile' })
-    use({ 'xiyaowong/coc-sumneko-lua', run = 'yarn install --frozen-lockfile' })
     -- Additional language support
+    use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
     use({ 'styled-components/vim-styled-components', branch = 'main' })
     use({ 'jparise/vim-graphql' })
-    -- Aditional editor plugins
-    use({ 'tpope/vim-commentary' })
-    use({ 'tpope/vim-surround' })
     -- Navigation
     use({ 'ryanoasis/vim-devicons' })
     use({ 'nvim-tree/nvim-web-devicons' })
@@ -53,6 +50,9 @@ require('packer').startup(
     -- Motions
     use({ 'ggandor/leap.nvim' })
     use({ 'mg979/vim-visual-multi' })
+    -- Aditional editor plugins
+    use({ 'tpope/vim-commentary' })
+    use({ 'tpope/vim-surround' })
     -- Tools
     use({ 'folke/which-key.nvim' })
   end
@@ -66,7 +66,7 @@ require('packer').startup(
 vim.opt.termguicolors = true
 vim.opt.winblend = 15
 vim.opt.relativenumber = true
-vim.opt.updatetime = 750
+vim.opt.updatetime = 200
 vim.opt.mouse = 'a'
 
 -- Use nvim tree instead
@@ -128,12 +128,6 @@ vim.cmd.colorscheme('onedark')
 require("onedark").load()
 
 --------------------------------------
--- WhichKey
---------------------------------------
-local wk = require("which-key")
-wk.setup({})
-
---------------------------------------
 -- Leap
 --------------------------------------
 require("leap").add_default_mappings(true);
@@ -144,8 +138,27 @@ for hl, col in pairs(LeapTheme) do
   vim.api.nvim_set_hl(0, hl, col)
 end
 
--- Todo: Set up mappings for motions
--- require('which-key.plugins.presets.init').
+--------------------------------------
+-- WhichKey
+--------------------------------------
+local wk = require("which-key")
+local presets = require('which-key.plugins.presets.init')
+local wkopts = {
+  operators = {
+    ['<leader>zy'] = "surround",
+    ['<leader>zY'] = "surround",
+    ['<leader>zc'] = "surround",
+    ['<leader>zC'] = "surround",
+  }
+}
+wk.setup(wkopts)
+
+-- Add motions and operators
+presets.motions["s"] = "Leap to"
+presets.motions["S"] = "Leap to (reverse)"
+presets.motions["x"] = "Leap until"
+presets.motions["X"] = "Leap until (reverse)"
+presets.setup(wk, presets, wkopts)
 
 --------------------------------------
 -- Lualine
@@ -260,7 +273,12 @@ vim.g.VM_maps = {
   ['Find Under'] = '<leader>n',
   ['Find Subword Under'] = '<leader>n'
 }
-vim.keymap.set("", "<C-c>", ":VMClear<CR>")
+vim.keymap.set(
+  "",
+  "<C-c>",
+  ":VMClear<CR>",
+  { silent = true }
+)
 
 --------------------------------------
 -- Telescope
@@ -433,6 +451,22 @@ require('nvim-treesitter.configs').setup({
 })
 
 --------------------------------------
+-- Commentary
+--------------------------------------
+--Todo - get nvim-ts-context-commentstring
+vim.keymap.set(
+  "n",
+  "<leader>c/",
+  "<Plug>CommentaryLine",
+  { silent = true, desc = "Comment line" }
+)
+vim.keymap.set(
+  "v",
+  "<leader>c/",
+  "<Plug>Commentary",
+  { silent = true, desc = "Comment selection" }
+)
+--------------------------------------
 -- Coc
 --------------------------------------
 -- Coc code actions
@@ -546,21 +580,86 @@ vim.keymap.set(
 )
 
 -- Git
-vim.keymap.set("n", "[g", "<Plug>(coc-git-prevchunk)", { desc = "Git prev chunk" })
-vim.keymap.set("n", "]g", "<Plug>(coc-git-nextchunk)", { desc = "Git next chunk" })
-vim.keymap.set("n", "[c", "<Plug>(coc-git-prevconflict)", { desc = "Git previous conflict" })
-vim.keymap.set("n", "]c", "<Plug>(coc-git-nextconflict)", { desc = "Git next conflict" })
-vim.keymap.set("o", "ig", "<Plug>(coc-git-chunk-inner)", { desc = "Git innner chunk" })
-vim.keymap.set("x", "ig", "<Plug>(coc-git-chunk-inner)", { desc = "Git inner chunk" })
-vim.keymap.set("o", "ag", "<Plug>(coc-git-chunk-outer)", { desc = "Git outer chunk" })
-vim.keymap.set("x", "ag", "<Plug>(coc-git-chunk-outer)", { desc = "Git outer chunk" })
+vim.keymap.set(
+  "n",
+  "[g",
+  "<Plug>(coc-git-prevchunk)",
+  { desc = "Git prev chunk" }
+)
+vim.keymap.set(
+  "n",
+  "]g",
+  "<Plug>(coc-git-nextchunk)",
+  { desc = "Git next chunk" }
+)
+vim.keymap.set(
+  "n",
+  "[c",
+  "<Plug>(coc-git-prevconflict)",
+  { desc = "Git previous conflict" }
+)
+vim.keymap.set(
+  "n",
+  "]c",
+  "<Plug>(coc-git-nextconflict)",
+  { desc = "Git next conflict" }
+)
+vim.keymap.set(
+  "o",
+  "ig",
+  "<Plug>(coc-git-chunk-inner)",
+  { desc = "Git innner chunk" }
+)
+vim.keymap.set(
+  "x",
+  "ig",
+  "<Plug>(coc-git-chunk-inner)",
+  { desc = "Git inner chunk" }
+)
+vim.keymap.set(
+  "o",
+  "ag",
+  "<Plug>(coc-git-chunk-outer)",
+  { desc = "Git outer chunk" }
+)
+vim.keymap.set(
+  "x",
+  "ag",
+  "<Plug>(coc-git-chunk-outer)",
+  { desc = "Git outer chunk" }
+)
 
 wk.register({ ["<leader>v"] = { name = "Version control", } }, { mode = { "n" } })
-vim.keymap.set('n', '<leader>vw', ':CocCommand git.copyUrl<CR>', { desc = 'Git copy url' })
-vim.keymap.set('n', '<leader>v,', ':CocCommand git.keepIncoming<CR>', { desc = 'Git keep incoming' })
-vim.keymap.set('n', '<leader>v.', ':CocCommand git.keepCurrent<CR>', { desc = 'Git keep current' })
-vim.keymap.set('n', '<leader>va', ':CocCommand git.chunkStage<CR>', { desc = 'Git stage chunk' })
-vim.keymap.set('n', '<leader>vc', '<Plug>(coc-git-commit)', { desc = 'Git commit' })
+vim.keymap.set(
+  'n',
+  '<leader>vw',
+  ':CocCommand git.copyUrl<CR>',
+  { desc = 'Git copy url' }
+)
+vim.keymap.set(
+  'n',
+  '<leader>v,',
+  ':CocCommand git.keepIncoming<CR>',
+  { desc = 'Git keep incoming' }
+)
+vim.keymap.set(
+  'n',
+  '<leader>v.',
+  ':CocCommand git.keepCurrent<CR>',
+  { desc = 'Git keep current' }
+)
+vim.keymap.set(
+  'n',
+  '<leader>va',
+  ':CocCommand git.chunkStage<CR>',
+  { desc = 'Git stage chunk' }
+)
+vim.keymap.set(
+  'n',
+  '<leader>vc',
+  '<Plug>(coc-git-commit)',
+  { desc = 'Git commit' }
+)
 
 -- docs
 vim.keymap.set(
@@ -592,6 +691,7 @@ vim.opt.updatetime = 300
 -- diagnostics appeared/became resolved
 vim.opt.signcolumn = "yes"
 
+-- TODO change highlight color
 -- Highlight the symbol and its references on a CursorHold event(cursor is idle)
 vim.api.nvim_create_augroup("CocGroup", {})
 vim.api.nvim_create_autocmd("CursorHold", {
@@ -599,3 +699,9 @@ vim.api.nvim_create_autocmd("CursorHold", {
   command = "silent call CocActionAsync('highlight')",
   desc = "Highlight symbol under cursor on CursorHold"
 })
+
+-- Add `:Format` command to format current buffer
+vim.api.nvim_create_user_command("Format", "call CocAction('format')", {})
+
+-- Add `:OR` command for organize imports of the current buffer
+vim.api.nvim_create_user_command("OR", "call CocActionAsync('runCommand', 'editor.action.organizeImport')", {})
