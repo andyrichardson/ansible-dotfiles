@@ -23,8 +23,6 @@ require('packer').startup(
     use({ 'neoclide/coc-git', run = 'yarn install --frozen-lockfile' })
     use({ 'felippepuhle/coc-graphql', run = 'yarn install --frozen-lockfile' })
     use({ 'josa42/coc-go', run = 'yarn install --frozen-lockfile' })
-    use({ 'weirongxu/coc-markdown-preview-enhanced', run = 'yarn install --frozen-lockfile' })
-    use({ 'weirongxu/coc-webview', run = 'yarn install --frozen-lockfile' })
     use({ 'pantharshit00/coc-prisma', run = 'yarn install --frozen-lockfile' })
     use({ 'josa42/coc-sh', run = 'yarn install --frozen-lockfile' })
     use({ 'neoclide/coc-snippets', run = 'yarn install --frozen-lockfile' })
@@ -37,11 +35,12 @@ require('packer').startup(
     use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
     use({ 'styled-components/vim-styled-components', branch = 'main' })
     use({ 'jparise/vim-graphql' })
+    use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install",
+      setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
     -- Navigation
-    use({ 'ryanoasis/vim-devicons' })
     use({ 'nvim-tree/nvim-tree.lua', requires = { 'nvim-tree/nvim-web-devicons' } })
     use({ 'akinsho/bufferline.nvim', tag = 'v3.*', requires = { 'nvim-tree/nvim-web-devicons' } })
-    use({ 'nvim-lualine/lualine.nvim' })
+    use({ 'nvim-lualine/lualine.nvim', requires = { 'nvim-tree/nvim-web-devicons' } })
     -- Telescope
     use({ 'nvim-telescope/telescope.nvim', tag = '0.1.0', requires = { 'nvim-lua/plenary.nvim' } })
     use({ 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' })
@@ -204,7 +203,7 @@ require("yanky").setup({
       mappings = {
         i = {
           ["<CR>"] = mapping.put('p'),
-          ["<C-CR>"] = mapping.put('P') -- TODO: Make sure alacritty does this correctly
+          ["<S-CR>"] = mapping.put('P')
         }
       }
     }
