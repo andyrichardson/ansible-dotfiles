@@ -52,6 +52,7 @@ require('packer').startup(
     use({ 'mg979/vim-visual-multi' })
     -- Aditional editor plugins
     use({ 'tpope/vim-commentary' })
+    use({ 'JoosepAlviste/nvim-ts-context-commentstring' })
     use({ 'tpope/vim-surround' })
     -- Tools
     use({ 'folke/which-key.nvim' })
@@ -480,6 +481,9 @@ setTelescopeTheme()
 -- Treesitter
 --------------------------------------
 require('nvim-treesitter.configs').setup({
+  context_commentstring = {
+    enable = true,
+  },
   -- A list of parser names, or 'all'
   ensure_installed = 'all',
   sync_install = false,
@@ -516,19 +520,21 @@ require('nvim-treesitter.configs').setup({
 --------------------------------------
 -- Commentary
 --------------------------------------
---Todo - get nvim-ts-context-commentstring
+-- Use contextual commentary mappings
+-- See - https://github.com/JoosepAlviste/nvim-ts-context-commentstring/pull/57
 vim.keymap.set(
   "n",
-  "<leader>c/",
-  "<Plug>CommentaryLine",
+  "g/",
+  '<Plug>ContextCommentaryLine',
   { silent = true, desc = "Comment line" }
 )
 vim.keymap.set(
   "v",
-  "<leader>c/",
-  "<Plug>Commentary",
+  "g/",
+  "<Plug>ContextCommentary",
   { silent = true, desc = "Comment selection" }
 )
+
 --------------------------------------
 -- Coc
 --------------------------------------
@@ -612,7 +618,7 @@ vim.keymap.set(
   "i",
   "<cr>",
   -- DELETE ON ENTER IF INDENTATION STILL SUCKS
-  'coc#pum#visible() ? coc#pum#confirm() : "\\<C-g>u\\<CR>\\<c-r>=coc#on_enter()<CR>"',
+  'coc#pum#visible() ? coc#pum#confirm() : "<cr>"',
   { silent = true, expr = true }
 )
 
