@@ -1,20 +1,22 @@
 require('packer').startup(
   function(use)
     use({ 'wbthomason/packer.nvim' })
+    -- Themes
     use({ 'navarasu/onedark.nvim' })
+    use({ 'Mofiqul/vscode.nvim' })
+    use({ 'arcticicestudio/nord-vim' })
+    use({ 'sonph/onehalf', rtp = "vim" })
     -- Coc plugins
-    use({ 'neoclide/coc.nvim', branch = 'release', disable = false })
+    use({ 'neoclide/coc.nvim', branch = 'release' })
     use({ 'neoclide/coc-highlight', run = 'yarn install --frozen-lockfile' })
     use({ 'neoclide/coc-tsserver', run = 'yarn install --frozen-lockfile' })
     use({ 'xiyaowong/coc-sumneko-lua', run = 'yarn install --frozen-lockfile' })
-    use({ 'neoclide/coc-tsserver', run = 'yarn install --frozen-lockfile' })
     use({ 'neoclide/coc-prettier', run = 'yarn install --frozen-lockfile' })
     use({ 'neoclide/coc-json', run = 'yarn install --frozen-lockfile' })
-    use({ 'weirongxu/coc-explorer', run = 'yarn install --frozen-lockfile' })
     use({ 'neoclide/coc-css', run = 'yarn install --frozen-lockfile' })
-    use({ 'neoclide/coc-lists', run = 'yarn install --frozen-lockfile' })
     use({ 'neoclide/coc-html', run = 'yarn install --frozen-lockfile' })
     use({ 'neoclide/coc-rls', run = 'yarn install --frozen-lockfile' })
+    use({ 'neoclide/coc-python', run = 'yarn install --frozen-lockfile' })
     use({ 'neoclide/coc-eslint', run = 'yarn install --frozen-lockfile' })
     use({ 'yaegassy/coc-ansible', run = 'yarn install --frozen-lockfile' })
     use({ 'voldikss/coc-cmake', run = 'yarn install --frozen-lockfile' })
@@ -37,16 +39,15 @@ require('packer').startup(
     use({ 'jparise/vim-graphql' })
     -- Navigation
     use({ 'ryanoasis/vim-devicons' })
-    use({ 'nvim-tree/nvim-web-devicons' })
-    use({ 'nvim-tree/nvim-tree.lua' })
-    use({ 'akinsho/bufferline.nvim', tag = 'v3.*' })
+    use({ 'nvim-tree/nvim-tree.lua', requires = { 'nvim-tree/nvim-web-devicons' } })
+    use({ 'akinsho/bufferline.nvim', tag = 'v3.*', requires = { 'nvim-tree/nvim-web-devicons' } })
     use({ 'nvim-lualine/lualine.nvim' })
     -- Telescope
-    use({ 'nvim-lua/plenary.nvim' })
-    use({ 'nvim-telescope/telescope.nvim', tag = '0.1.0' })
+    use({ 'nvim-telescope/telescope.nvim', tag = '0.1.0', requires = { 'nvim-lua/plenary.nvim' } })
     use({ 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' })
     use({ 'gbprod/yanky.nvim' })
     use({ 'fannheyward/telescope-coc.nvim' })
+    use({ 'rmagatti/session-lens', requires = { 'rmagatti/auto-session' } })
     -- Motions
     use({ 'ggandor/leap.nvim' })
     use({ 'mg979/vim-visual-multi' })
@@ -58,7 +59,7 @@ require('packer').startup(
   end
 )
 
-
+vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
 
 --------------------------------------
 -- General settings
@@ -163,7 +164,12 @@ presets.setup(wk, presets, wkopts)
 --------------------------------------
 -- Lualine
 --------------------------------------
-require("lualine").setup()
+require("lualine").setup({
+  options = {
+    section_separators = { left = '', right = '' },
+    component_separators = { left = '', right = '' }
+  }
+})
 
 --------------------------------------
 -- Bufferline
@@ -171,14 +177,45 @@ require("lualine").setup()
 require("bufferline").setup({
   options = {
     mode = "tabs",
-    separator_style = "slant"
+    diagnostics = "coc",
+    offsets = {
+      {
+        filetype = "NvimTree",
+        text = "File Explorer",
+        highlight = "Directory",
+        separator = true
+      }
+    },
+    indicator = { style = "none" },
+    -- Prevent NvimTree being used for tab name
+    custom_filter = function(buf)
+      return vim.bo[buf].filetype ~= "NvimTree"
+    end
   }
 })
 
 --------------------------------------
 -- Yanky
 --------------------------------------
-require("yanky").setup({})
+local mapping = require("yanky.telescope.mapping")
+require("yanky").setup({
+  picker = {
+    telescope = {
+      mappings = {
+        i = {
+          ["<CR>"] = mapping.put('p'),
+          ["<C-CR>"] = mapping.put('P') -- TODO: Make sure alacritty does this correctly
+        }
+      }
+    }
+  }
+})
+
+--------------------------------------
+-- Sessions
+--------------------------------------
+require('auto-session').setup({})
+require("session-lens").setup({})
 
 --------------------------------------
 -- Nvim tree view
@@ -199,19 +236,38 @@ local function find_in_folder(node)
 end
 
 require("nvim-tree").setup({
+  respect_buf_cwd = true,
+  update_focused_file = {
+    enable = true
+  },
+  git = {
+    ignore = false
+  },
+  select_prompts = true, -- TODO: find out what this does
   remove_keymaps = { "s" }, -- allow leap in tree
+  tab = {
+    sync = {
+      open = true,
+      close = true
+    }
+  },
   view = {
+    hide_root_folder = true,
+    adaptive_size = true,
+    relativenumber = true,
     mappings = {
       list = {
         { key = "<C-s>", action = "split" },
         { key = "<C-g>", action = "find_in_folder", action_cb = find_in_folder }
       }
-    }
+    },
   }
 })
+
 --------------------------------------
 -- Vim surround
 --------------------------------------
+vim.g.surround_no_mappings = 1
 wk.register({ ["<leader>z"] = { name = "Surround" } }, { mode = { "n", "v" } })
 vim.keymap.set(
   "n",
@@ -339,6 +395,13 @@ vim.keymap.set(
   ':Telescope coc mru<CR>',
   { desc = 'List recently used (history)' }
 )
+vim.keymap.set(
+  '',
+  '<leader>lp',
+  ':Telescope session-lens search_session<CR>',
+  { desc = "List sessions" }
+)
+
 -- Init
 local telescope = require('telescope')
 telescope.setup({
@@ -378,6 +441,7 @@ telescope.setup({
 telescope.load_extension('fzf')
 telescope.load_extension("yank_history")
 telescope.load_extension("coc")
+telescope.load_extension("session-lens")
 
 -- Theme
 function setTelescopeTheme()
@@ -549,7 +613,7 @@ vim.keymap.set(
   "i",
   "<cr>",
   -- DELETE ON ENTER IF INDENTATION STILL SUCKS
-  [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()<CR>"]],
+  'coc#pum#visible() ? coc#pum#confirm() : "\\<C-g>u\\<CR>\\<c-r>=coc#on_enter()<CR>"',
   { silent = true, expr = true }
 )
 
@@ -638,15 +702,15 @@ vim.keymap.set(
 )
 vim.keymap.set(
   'n',
-  '<leader>v,',
+  '<leader>v.',
   ':CocCommand git.keepIncoming<CR>',
-  { desc = 'Git keep incoming' }
+  { desc = 'Git keep incoming (bottom)' }
 )
 vim.keymap.set(
   'n',
-  '<leader>v.',
+  '<leader>v,',
   ':CocCommand git.keepCurrent<CR>',
-  { desc = 'Git keep current' }
+  { desc = 'Git keep current (top)' }
 )
 vim.keymap.set(
   'n',
@@ -676,6 +740,15 @@ vim.keymap.set(
   { silent = true, desc = "Show documentation" }
 )
 
+-- Highlight current word
+vim.api.nvim_set_hl(0, 'CocHighlightText', { link = "DiffText" })
+vim.api.nvim_create_augroup("CocGroup", {})
+vim.api.nvim_create_autocmd("CursorHold", {
+  group = "CocGroup",
+  command = "silent call CocActionAsync('highlight')",
+  desc = "Highlight symbol under cursor on CursorHold"
+})
+
 --------------------------------------
 -- Coc (defaults)
 --------------------------------------
@@ -690,15 +763,6 @@ vim.opt.updatetime = 300
 -- Always show the signcolumn, otherwise it would shift the text each time
 -- diagnostics appeared/became resolved
 vim.opt.signcolumn = "yes"
-
--- TODO change highlight color
--- Highlight the symbol and its references on a CursorHold event(cursor is idle)
-vim.api.nvim_create_augroup("CocGroup", {})
-vim.api.nvim_create_autocmd("CursorHold", {
-  group = "CocGroup",
-  command = "silent call CocActionAsync('highlight')",
-  desc = "Highlight symbol under cursor on CursorHold"
-})
 
 -- Add `:Format` command to format current buffer
 vim.api.nvim_create_user_command("Format", "call CocAction('format')", {})
