@@ -1,6 +1,7 @@
 require('packer').startup(
   function(use)
     use({ 'wbthomason/packer.nvim' })
+    use({ 'dstein64/vim-startuptime' })
     -- Themes
     use({ 'navarasu/onedark.nvim' })
     use({ 'Mofiqul/vscode.nvim' })
@@ -35,14 +36,19 @@ require('packer').startup(
     use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
     use({ 'styled-components/vim-styled-components', branch = 'main' })
     use({ 'jparise/vim-graphql' })
-    use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install",
-      setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
+    use({
+      "iamcco/markdown-preview.nvim",
+      run = "cd app && npm install",
+      setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
+      ft = { "markdown" },
+    })
+    use({ "hashivim/vim-terraform" })
     -- Navigation
     use({ 'nvim-tree/nvim-tree.lua', requires = { 'nvim-tree/nvim-web-devicons' } })
     use({ 'akinsho/bufferline.nvim', tag = 'v3.*', requires = { 'nvim-tree/nvim-web-devicons' } })
     use({ 'nvim-lualine/lualine.nvim', requires = { 'nvim-tree/nvim-web-devicons' } })
     -- Telescope
-    use({ 'nvim-telescope/telescope.nvim', tag = '0.1.0', requires = { 'nvim-lua/plenary.nvim' } })
+    use({ 'nvim-telescope/telescope.nvim', tag = '0.1.8', requires = { 'nvim-lua/plenary.nvim' } })
     use({ 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' })
     use({ 'gbprod/yanky.nvim' })
     use({ 'fannheyward/telescope-coc.nvim' })
@@ -54,10 +60,12 @@ require('packer').startup(
     use({ 'tpope/vim-commentary' })
     use({ 'JoosepAlviste/nvim-ts-context-commentstring' })
     use({ 'tpope/vim-surround' })
+    use({ 'lukas-reineke/indent-blankline.nvim' })
     -- Tools
     use({ 'folke/which-key.nvim' })
   end
 )
+
 
 vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
 
@@ -69,6 +77,7 @@ vim.opt.winblend = 15
 vim.opt.relativenumber = true
 vim.opt.updatetime = 200
 vim.opt.mouse = 'a'
+vim.opt.splitright = true
 
 -- Use nvim tree instead
 vim.g.loaded_netrw = 1
@@ -143,7 +152,7 @@ end
 -- WhichKey
 --------------------------------------
 local wk = require("which-key")
-local presets = require('which-key.plugins.presets.init')
+-- local presets = require('which-key.plugins.presets.init')
 local wkopts = {
   operators = {
     ['<leader>zy'] = "surround",
@@ -152,14 +161,14 @@ local wkopts = {
     ['<leader>zC'] = "surround",
   }
 }
-wk.setup(wkopts)
+-- wk.setup(wkopts)
 
 -- Add motions and operators
-presets.motions["s"] = "Leap to"
-presets.motions["S"] = "Leap to (reverse)"
-presets.motions["x"] = "Leap until"
-presets.motions["X"] = "Leap until (reverse)"
-presets.setup(wk, presets, wkopts)
+-- presets.motions["s"] = "Leap to"
+-- presets.motions["S"] = "Leap to (reverse)"
+-- presets.motions["x"] = "Leap until"
+-- presets.motions["X"] = "Leap until (reverse)"
+-- presets.setup(wk, presets, wkopts)
 
 --------------------------------------
 -- Lualine
@@ -243,7 +252,7 @@ require("nvim-tree").setup({
   git = {
     ignore = false
   },
-  select_prompts = true, -- TODO: find out what this does
+  select_prompts = true,    -- TODO: find out what this does
   remove_keymaps = { "s" }, -- allow leap in tree
   tab = {
     sync = {
@@ -317,7 +326,8 @@ vim.keymap.set(
 --------------------------------------
 wk.register({
   ['<leader>n'] = {
-    name = "Multi cursor", {
+    name = "Multi cursor",
+    {
       n = "Match forward",
       N = "Match backward",
       q = "Skip forward",
@@ -478,6 +488,14 @@ end
 setTelescopeTheme()
 
 --------------------------------------
+-- Indentation lines
+--------------------------------------
+require("indent_blankline").setup({
+  use_treesitter = true
+})
+vim.api.nvim_set_hl(0, 'IndentBlanklineChar', { link = "WinSeparator" })
+
+--------------------------------------
 -- Treesitter
 --------------------------------------
 require('nvim-treesitter.configs').setup({
@@ -520,6 +538,8 @@ require('nvim-treesitter.configs').setup({
 --------------------------------------
 -- Commentary
 --------------------------------------
+-- TODO: Unload commentary default mappings
+
 -- Use contextual commentary mappings
 -- See - https://github.com/JoosepAlviste/nvim-ts-context-commentstring/pull/57
 vim.keymap.set(
@@ -559,7 +579,7 @@ vim.keymap.set(
   { silent = true, desc = "Code action rename (coc)" }
 )
 vim.keymap.set(
-  "n",
+  "x",
   "<leader>cf",
   "<Plug>(coc-format-selection)",
   { silent = true, desc = "Format selection (coc)" }

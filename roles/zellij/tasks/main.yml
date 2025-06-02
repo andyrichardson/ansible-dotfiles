@@ -1,0 +1,11 @@
+- name: install packages
+  pacman:
+    name: zellij
+    state: present
+  become: yes
+
+- name: Add config to home
+  file:
+    src: "{{ role_path }}/files/.alacritty.yml"
+    dest: "/home/{{ user }}/.config/zellij/config.kdl"
+    state: link

@@ -8,15 +8,16 @@ shell:
 env:
   TERM: xterm-256color
 font:
-  size: 11
+  size: 12
   offset:
     x: 1
-    y: 2
+    y: 5
   glyph_offset:
     y: 1
   normal:
-    family: "Hack Nerd Font Mono"
-    size: Regular
+    family: "DejaVuSansMono Nerd Font"
+    style: Book
+    antialias: false
 key_bindings:
   - {
       key: Comma,
